@@ -1,0 +1,16 @@
+<table class="table table-striped">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Date</th>
+        <th scope="col">High</th>
+        <th scope="col">Low</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="unit : ${cryptoUnits}">
+        <td th:utext="${unit.getDate()}">...</td>
+        <td th:utext="${unit.getHigh()}">...</td>
+        <td th:utext="${unit.getLow()}">...</td>
+    </tr>
+    </tbody>
+</table>

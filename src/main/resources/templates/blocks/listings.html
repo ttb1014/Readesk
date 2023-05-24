@@ -1,0 +1,14 @@
+<table class="table table-striped">
+  <thead class="thead-dark">
+  <tr>
+    <th scope="col">Supported Coins</th>
+    <th scope="col">Supported Physical currencies</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="listing : ${listings}">
+    <td th:utext="${listing.getCoin()}">...</td>
+    <td th:utext="${listing.getMarket()}">...</td>
+  </tr>
+  </tbody>
+</table>
