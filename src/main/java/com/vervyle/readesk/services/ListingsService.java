@@ -17,6 +17,7 @@ public class ListingsService {
         this.listingsProcessor = listingsProcessor;
     }
 
+    @SuppressWarnings("all")
     public static class Listing {
         private String coin;
         private String market;

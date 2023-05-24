@@ -1,7 +1,6 @@
 package com.vervyle.readesk.model;
 
 import com.crazzyghost.alphavantage.AlphaVantage;
-import com.crazzyghost.alphavantage.AlphaVantageException;
 import com.crazzyghost.alphavantage.Config;
 import com.crazzyghost.alphavantage.Fetcher;
 import com.crazzyghost.alphavantage.cryptocurrency.response.CryptoResponse;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
+@SuppressWarnings("all")
 public class ChartData {
     private Fetcher.SuccessCallback<Object> successCallback;
     private Fetcher.FailureCallback failureCallback;
@@ -35,19 +35,11 @@ public class ChartData {
 
     @Autowired
     public ChartData(ListingsProcessor listingsProcessor) {
-        failureCallback = new Fetcher.FailureCallback() {
-            @Override
-            public void onFailure(AlphaVantageException e) {
-                System.out.println("Error has occurred while getting data from AlphaVantage API" + e.getMessage());
-            }
-        };
-        successCallback = new Fetcher.SuccessCallback<Object>() {
-            @Override
-            public void onSuccess(Object o) {
-                List<CryptoUnit> list = ((CryptoResponse) o).getCryptoUnits();
-                for (CryptoUnit unit : list) {
-                    System.out.println(unit.toString());
-                }
+        failureCallback = e -> System.out.println("Error has occurred while getting data from AlphaVantage API" + e.getMessage());
+        successCallback = o -> {
+            List<CryptoUnit> list = ((CryptoResponse) o).getCryptoUnits();
+            for (CryptoUnit unit : list) {
+                System.out.println(unit.toString());
             }
         };
         this.listingsProcessor = listingsProcessor;
