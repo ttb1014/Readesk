@@ -35,24 +35,24 @@ public class ChartDataDAOImpl implements ChartDataDao {
         return result;
     }
 
-    private JSONArray getJSONData(ChartType chartType, List<CryptoUnit> cryptoUnits) {
-        JSONArray jsonData = new JSONArray();
-        for (CryptoUnit cryptoUnit : cryptoUnits) {
-            JSONObject jsonObject = new JSONObject()
-                    .put("x", cryptoUnit.getDate());
-            switch (chartType) {
-                case LOW -> jsonObject.put("y", cryptoUnit.getLow());
-                case HIGH -> jsonObject.put("y", cryptoUnit.getHigh());
-                case VOLUME -> jsonObject.put("y", cryptoUnit.getVolume());
-                default -> System.out.println("Cannot find this field in cryptoUnit!");
-            }
-            jsonData.put(jsonObject);
-        }
-        return jsonData;
-    }
-
-    public String getChartData(String coinName, String marketName, ChartType chartType) {
-        List<CryptoUnit> cryptoUnits = getData(coinName, marketName);
-        return getJSONData(chartType, cryptoUnits).toString();
-    }
+//    private JSONArray getJSONData(ChartType chartType, List<CryptoUnit> cryptoUnits) {
+//        JSONArray jsonData = new JSONArray();
+//        for (CryptoUnit cryptoUnit : cryptoUnits) {
+//            JSONObject jsonObject = new JSONObject()
+//                    .put("x", cryptoUnit.getDate());
+//            switch (chartType) {
+//                case LOW -> jsonObject.put("y", cryptoUnit.getLow());
+//                case HIGH -> jsonObject.put("y", cryptoUnit.getHigh());
+//                case VOLUME -> jsonObject.put("y", cryptoUnit.getVolume());
+//                default -> System.out.println("Cannot find this field in cryptoUnit!");
+//            }
+//            jsonData.put(jsonObject);
+//        }
+//        return jsonData;
+//    }
+//
+//    public String getChartData(String coinName, String marketName, ChartType chartType) {
+//        List<CryptoUnit> cryptoUnits = getData(coinName, marketName);
+//        return getJSONData(chartType, cryptoUnits).toString();
+//    }
 }

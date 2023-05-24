@@ -19,76 +19,80 @@
         console.log(marketName);
         console.log(chartType);
     }
-
 </script>
-<form method="setParams" name="selector">
+<form name="selector">
     <label>
         <select name="coinName" onchange="setParams()">
-            <option th:each="coin : ${coins}" th:utext="${coin}"></option>
+            <option th:each="coin : ${coins}" th:utext="${coin}" th:selected="${coin == coinName}"></option>
         </select>
     </label>
     <label>
-        <select name="marketName">
-            <option th:each="market : ${markets}" th:utext="${market}"></option>
+        <select name="marketName" onchange="setParams()">
+            <option th:each="market : ${markets}" th:utext="${market}" th:selected="${market == marketName}"></option>
         </select>
     </label>
     <label>
-        <select name="chartType">
-            <option th:each="chartType : ${chartTypes}" th:utext="${chartType}"></option>
+        <select name="chartType" onchange="setParams()">
+            <option th:each="type : ${chartTypes}" th:utext="${type}" th:selected="${type == chartType}"></option>
         </select>
     </label>
-    <button type="submit" class="btn btn-primary btn-medium">Generate chart</button>
+    <button type="submit" class="btn btn-primary btn-medium" onclick="renderChart()">Generate chart</button>
 </form>
 <script>
-    const form = document.forms.namedItem("selector");
-    let coinName = form.elements.namedItem("coinName").value,
-        marketName = form.elements.namedItem("marketName").value,
-        chartType = form.elements.namedItem("chartType").value;
+    function renderChart() {
+        const form = document.forms.namedItem("selector");
+        let coinName = form.elements.namedItem("coinName").value,
+            marketName = form.elements.namedItem("marketName").value,
+            chartType = form.elements.namedItem("chartType").value;
 
-    const dataPoints = [];
-    $(window).on('load', function () {
-        var chart = new CanvasJS.Chart("chartContainer", {
-            animationEnabled: true,
-            zoomEnabled: true,
-            title: {
-                text: "BTC/AED market 2020-2023"
-            },
-            axisX: {
-                crosshair: {
-                    enabled: true,
-                    snapToDataPoint: true,
-                    valueFormatString: "DD MMM"
-                }
-            },
-            axisY: {
-                title: "Volume (in USD)",
-                crosshair: {
-                    enabled: true,
-                    snapToDataPoint: true,
-                    valueFormatString: "$#,##0.00"
-                }
-            },
-            data: [{
-                type: "line",
-                xValueFormatString: "DD MMM",
-                yValueFormatString: "$#,##0.00",
-                xValueType: "dateTime",
-                dataPoints: dataPoints
-            }]
-        });
-        chart.render();
-    })
-
-    function addData(data) {
-        for (var i = 0; i < data.length; i++) {
-            dataPoints.push({
-                x: new Date(data[i].x),
-                y: data[i].y
+        const dataPoints = [];
+        $(window).on('load', function () {
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                zoomEnabled: true,
+                title: {
+                    text: coinName + "/" + marketName + " 2020-2023"
+                },
+                axisX: {
+                    crosshair: {
+                        enabled: true,
+                        snapToDataPoint: true,
+                        valueFormatString: "DD MMM"
+                    }
+                },
+                axisY: {
+                    title: chartType + " (in " + marketName  + ")",
+                    crosshair: {
+                        enabled: true,
+                        snapToDataPoint: true,
+                        valueFormatString: "$#,##0.00"
+                    }
+                },
+                data: [{
+                    type: "line",
+                    xValueFormatString: "DD MMM",
+                    yValueFormatString: "$#,##0.00",
+                    xValueType: "dateTime",
+                    dataPoints: dataPoints
+                }]
             });
+            chart.render();
+        })
+
+        function addData(data) {
+            for (var i = 0; i < data.length; i++) {
+                dataPoints.push({
+                    x: new Date(data[i].x),
+                    y: data[i].y
+                });
+            }
         }
+
+        console.log("invoking restfull service with: " + coinName + "/" + marketName + "/" + chartType);
+        $.getJSON(`http://localhost:10000/restfull-service/nasdaq-quotes?coinName=${coinName}&marketName=${marketName}&chartType=${chartType}`, addData);
     }
 
-    $.getJSON("http://localhost:10000/restfull-service/nasdaq-quotes?coinName=${coinName}&marketName=${marketName}&chartType=${chartType}", addData);
+    renderChart()
 </script>
 <div id="chartContainer" style="height: 370px; width: 100%;"></div>
 <table th:replace="~{blocks/table :: table}"></table>

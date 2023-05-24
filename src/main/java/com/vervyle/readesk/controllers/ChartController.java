@@ -31,18 +31,15 @@ public class ChartController {
     @GetMapping("/chart")
     public String chart(Model model,
                         @RequestParam(value = "coinName", required = false) String coinName,
-                        @RequestParam(value = "marketName", required = false) String marketName) {
-        List<CryptoUnit> cryptoUnits;
-        try {
-            cryptoUnits = chartDataService.getData(coinName, marketName);
-            model.addAttribute("cryptoUnits", cryptoUnits);
-        } catch (RuntimeException e) {
-            System.out.println(e.getMessage());
-        }
+                        @RequestParam(value = "marketName", required = false) String marketName,
+                        @RequestParam(value = "chartType", required = false) ChartType chartType) {
+        List<CryptoUnit> cryptoUnits = chartDataService.getData(coinName, marketName);
         List<String> coins = listingsService.getCoins();
         List<String> markets = listingsService.getMarkets();
+        model.addAttribute("cryptoUnits", cryptoUnits);
         model.addAttribute("coinName", coinName);
         model.addAttribute("marketName", marketName);
+        model.addAttribute("chartType", chartType);
         model.addAttribute("coins", coins);
         model.addAttribute("markets", markets);
         model.addAttribute("chartTypes", ChartType.values());
