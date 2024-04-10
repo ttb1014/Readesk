@@ -60,8 +60,9 @@
         <dependency>
             <groupId>com.github.crazzyghost</groupId>
             <artifactId>alphavantage-java</artifactId>
-            <version>1.6.2</version>
+            <version>1.7.0</version>
         </dependency>
+
         <dependency>
             <groupId>sh.joinery</groupId>
             <artifactId>joinery-dataframe</artifactId>
@@ -71,6 +72,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.json/json -->
